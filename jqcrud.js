@@ -3,63 +3,66 @@ $(() => {
     console.log("Working")
   }
   else{
-    console.log("Didn't work")
+    console.log("Didn't work Load Movies Function")
   }
   $("#movies").on("click", ".btn-danger", handleDelete);
   $("#movies").on("click", ".btn-primary", handleUpdate);
   $("#addBtn").click(addMovie);
   $("#updateSave").click((event) =>{
-    var id = $(".updateId").val();
-    var name = $(".updateName").val();
-    var description = $(".updateDescription").val();
-    var year = $(".updateYear").val();
-    var image = $(".updateImage").val();
+    var id = $("#updateId").val();
+    var name = $("#updateName").val();
+    var description = $("#updateDescription").val();
+    var year = $("#updateYear").val();
+     var image = $("#updateImage").val();
     event.preventDefault();
     $.ajax({
-      url: "https://marwakhalidapi.herokuapp.com/movies" + id,
-      data: {name, year, description, image},
+      url: `https://marwa-api.herokuapp.com/movies/${id}`,
+      data: {name, year, description,image},
       method: "PATCH",
       success: (response) =>{
         console.log(response);
+        console.log("PUT Method")
+        loadMovies();
         $("#updateModal").modal("hide");
-        loadmovies();
+        
       }
     });
   });
 });
 function handleUpdate(){
   var btn = $(this);
-  var parentDiv = btn.closest(".product");
+  var parentDiv = btn.closest(".movieCard");
   let id = parentDiv.attr("data-id");
-  $.get("https://marwakhalidapi.herokuapp.com/movies/" + id, (response) => {
+  console.log(id);
+  $.get("https://marwa-api.herokuapp.com/movies/" + id, (response) => {
     $("#updateId").val(response._id);
     $("#updateName").val(response.name);
     $("#updateDescription").val(response.description);
     $("#updateYear").val(response.year);
-    $("#updateImage").val(response.imagePath);
+     $("#updateImage").val(response.image);
     $("#updateModal").modal("show");
   });
 }
 function addMovie() {
-  var name = $(".name").val();
-  var year = $(".year").val();
-  var description = $(".description").val();
+  var name = $("#name").val();
+  var year = $("#year").val();
+  var description = $("#description").val();
   var image = $(".image").val();
   $.ajax({
-    url: "https://marwakhalidapi.herokuapp.com/movies",
+    url: "https://marwa-api.herokuapp.com/movies",
     method: "POST",
-    data: {name, year, description, image},
+    data: {name, year, description,image},
      error:(response) =>{
-      console.log("ughhh")
-      console.log(response)
+      console.log("Error in Post Method")
+      console.log(response.data)
     },
     success: (response) => {
       console.log("Working");
       console.log(response);
-      $(".name").val("");
-      $(".year").val("");
-      $(".description").val("");
-      $(".image").val("");
+      $("#name").val("");
+      $("#year").val("");
+      $("#description").val("");
+       $("#image").val("");
       loadMovies();
       $("#addModal").modal("hide");
     }
@@ -67,11 +70,11 @@ function addMovie() {
 }
 function handleDelete() {
   var btn = $(this);
-  var parentDiv = btn.closest(".movie");
+  var parentDiv = btn.closest(".movieCard");
   let id = parentDiv.attr("data-id");
   console.log(id);
   $.ajax({
-    url: "https://marwakhalidapi.herokuapp.com/movies/" + id,
+    url: "https://marwa-api.herokuapp.com/movies/" + id,
     method: "DELETE",
     error:(response) =>{
       console.log("ughhh")
@@ -84,7 +87,7 @@ function handleDelete() {
 }
 function loadMovies(){
   $.ajax({
-    url: "https://marwakhalidapi.herokuapp.com/movies",
+    url: "https://marwa-api.herokuapp.com/movies",
     method: "GET",
     error: (response) =>{
       var movies = $("#movies");
@@ -101,7 +104,7 @@ function loadMovies(){
         movies.append(
           `<div class="col-sm-3 shadow m-4 p-4" >
             <div class="movieCard" data-id="${response[i]._id}">
-              <img style="width:100%" srcset="https://marwakhalidapi.herokuapp.com/${response[i].imagePath}"/>
+              <img style="width:100%" srcset="https://marwa-api.herokuapp.com/uploads/${response[i].image}"/>
               <div class="p-2 movie-details">
                 <h2 class="name" >${response[i].name}</h2>
                 <span class="year" >${response[i].year}</span>
