@@ -16,7 +16,7 @@ $(() => {
      var image = $("#updateImage").val();
     event.preventDefault();
     $.ajax({
-      url: `https://marwa-api.herokuapp.com/movies/${id}`,
+      url: `http://localhost:3500/movies/${id}`,
       data: {name, year, description,image},
       method: "PATCH",
       success: (response) =>{
@@ -34,7 +34,7 @@ function handleUpdate(){
   var parentDiv = btn.closest(".movieCard");
   let id = parentDiv.attr("data-id");
   console.log(id);
-  $.get("https://marwa-api.herokuapp.com/movies/" + id, (response) => {
+  $.get("http://localhost:3500/movies/" + id, (response) => {
     $("#updateId").val(response._id);
     $("#updateName").val(response.name);
     $("#updateDescription").val(response.description);
@@ -49,7 +49,7 @@ function addMovie() {
   var description = $("#description").val();
   var image = $(".image").val();
   $.ajax({
-    url: "https://marwa-api.herokuapp.com/movies",
+    url: "http://localhost:3500/movies",
     method: "POST",
     data: {name, year, description,image},
      error:(response) =>{
@@ -74,7 +74,7 @@ function handleDelete() {
   let id = parentDiv.attr("data-id");
   console.log(id);
   $.ajax({
-    url: "https://marwa-api.herokuapp.com/movies/" + id,
+    url: "http://localhost:3500/movies/" + id,
     method: "DELETE",
     error:(response) =>{
       console.log("ughhh")
@@ -87,7 +87,7 @@ function handleDelete() {
 }
 function loadMovies(){
   $.ajax({
-    url: "https://marwa-api.herokuapp.com/movies",
+    url: "http://localhost:3500/movies",
     method: "GET",
     error: (response) =>{
       var movies = $("#movies");
@@ -104,7 +104,7 @@ function loadMovies(){
         movies.append(
           `<div class="col-sm-3 shadow m-4 p-4" >
             <div class="movieCard" data-id="${response[i]._id}">
-              <img style="width:100%" srcset="https://marwa-api.herokuapp.com/uploads/${response[i].image}"/>
+              <img style="width:100%" srcset="http://localhost:3500/uploads/${response[i].image}"/>
               <div class="p-2 movie-details">
                 <h2 class="name" >${response[i].name}</h2>
                 <span class="year" >${response[i].year}</span>
